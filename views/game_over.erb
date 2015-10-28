@@ -1,0 +1,7 @@
+<% if session[:player_pot] > 0 %>
+  <h4>You walk away with $<%= session[:player_pot] %></h2>
+  <a href="/new_game">Play Again</a>
+<% else %>
+  <h4>Well you lost all your money!</h2>
+  <a href="/new_game">Play Again</a>
+<% end %>

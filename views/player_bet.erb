@@ -1,0 +1,8 @@
+<h4><%= session[:player_name] %> has $<%= session[:player_pot] %></h4>
+<h5>How much would you like to bet?</h5>
+<form action="player_bet" method="post">
+  <input type="text" name="player_bet">
+  <br>
+  <input type="submit" class="btn" value="Deal Cards">
+</form>
+
