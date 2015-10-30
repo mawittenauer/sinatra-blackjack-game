@@ -10,16 +10,16 @@
 
 <div class="well">
   <h4>the dealer has the following cards:</h4>
-  <% if session[:player_turn] %>
-    <img src="/images/cards/cover.jpg" class="card_image">
-    <%= card_image(session[:dealer_cards][1]) %>
-  <% else %>
-    <% session[:dealer_cards].each do |card| %>
+  <% session[:dealer_cards].each_with_index do |card, index| %>
+    <% if session[:player_turn] && index == 0 %>
+      <img src="/images/cards/cover.jpg" class="card_image">
+    <% else %>
       <%= card_image(card) %>
     <% end %>
-  <h4>For a total of <%= calculate_total(session[:dealer_cards]) %></h4>
   <% end %>
+  
   <% if @show_dealer_hit %>
+    <h4>For a total of <%= calculate_total(session[:dealer_cards]) %></h4>
     <form action="/dealer_hit" method="post">
       <input type="submit" class="btn btn-info" value="See Dealers Next Card">
     </form>

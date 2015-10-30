@@ -181,7 +181,7 @@ end
 
 get '/compare' do
   @show_hit_or_stay_buttons = false
-  @play_again = true
+  
   dealer_total = calculate_total(session[:dealer_cards])
   player_total = calculate_total(session[:player_cards])
   
