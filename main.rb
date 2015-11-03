@@ -39,7 +39,7 @@ helpers do
     
     total = 0
     values.each do |value|
-      if value.to_i == 'A'
+      if value == 'A'
         total += 11
       else
         total += value.to_i == 0 ? 10 : value.to_i
