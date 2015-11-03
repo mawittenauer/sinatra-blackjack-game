@@ -46,6 +46,11 @@ helpers do
       end
     end
     
+    values.select{|value| value == 'A'}.count.times do
+      break if total <= BLACKJACK_AMOUNT
+      total -= 10
+    end
+    
     total
   end
   
