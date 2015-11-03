@@ -47,7 +47,7 @@ helpers do
     end
     
     values.select{|value| value == 'A'}.count.times do
-      break if total <= BLACKJACK_AMOUNT
+      break if total <= 21
       total -= 10
     end
     
@@ -59,7 +59,7 @@ helpers do
     player_name = session[:player_name]
     player_pot = session[:player_pot]
     @play_again = true
-    @winner = "#{player_name} Wins! #{msg} #{player_name} now has $#{player_pot}"
+    @winner = "<strong>#{player_name} Wins!</strong> #{msg}"
   end
   
   def loser!(msg)
@@ -67,11 +67,12 @@ helpers do
     player_name = session[:player_name]
     player_pot = session[:player_pot]
     @play_again = true
-    @loser = "#{session[:player_name]} Loses! #{msg} #{player_name} now has $#{player_pot}"
+    @loser = "<strong>#{player_name} Lost.</strong> #{msg}"
   end
           
   def tie!(msg)
-    @winner = msg
+    @play_again = true
+    @winner = "<strong>It's a tie</strong> #{msg}"
   end
   
 end
@@ -206,11 +207,11 @@ get '/compare' do
   player_total = calculate_total(session[:player_cards])
   
   if player_total > dealer_total
-    winner!("#{player_total} beats #{dealer_total}!")
+    winner!("#{session[:player_name]} stayed at #{player_total}, the dealer stayed at #{dealer_total}.")
   elsif player_total < dealer_total
-    loser!("#{dealer_total} beats #{player_total}")
+    loser!("Dealer stayed at #{dealer_total}, #{session[:player_name]} stayed at #{player}.")
   else
-    tie!("It's a tie!")
+    tie!("Both #{session[:player_name]} and the dealer stayed at #{player_total}")
   end
   
   erb :game
