@@ -84,7 +84,7 @@ end
  
 get '/' do
   if session[:player_name]
-    redirect '/game/player'
+    redirect '/game'
   else
     redirect '/new_game'
   end
