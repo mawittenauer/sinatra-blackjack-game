@@ -10,3 +10,7 @@ form#hit_form {
 form#stay_form {
   float: left;
 }
+
+.card_image {
+  height: 100px;
+}

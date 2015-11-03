@@ -54,7 +54,7 @@ helpers do
     player_name = session[:player_name]
     player_pot = session[:player_pot]
     @play_again = true
-    @success = "#{player_name} Wins! #{msg} #{player_name} now has $#{player_pot}"
+    @winner = "#{player_name} Wins! #{msg} #{player_name} now has $#{player_pot}"
   end
   
   def loser!(msg)
@@ -62,7 +62,11 @@ helpers do
     player_name = session[:player_name]
     player_pot = session[:player_pot]
     @play_again = true
-    @error = "#{session[:player_name]} Loses! #{msg} #{player_name} now has $#{player_pot}"
+    @loser = "#{session[:player_name]} Loses! #{msg} #{player_name} now has $#{player_pot}"
+  end
+          
+  def tie!(msg)
+    @winner = msg
   end
   
 end
@@ -127,6 +131,23 @@ post '/player_bet' do
     session[:dealer_cards] << session[:deck].pop
   end
   
+  redirect '/game'
+end
+
+get '/game' do
+  player_total = calculate_total(session[:player_cards])
+  player_name = session[:player_name]
+  
+  if player_total == BLACK_JACK
+    winner!("You Hit Blackjack!")
+    @show_hit_or_stay_buttons = false
+  end
+  
+  erb :game
+end
+
+post '/player_hit' do
+  session[:player_cards] << session[:deck].pop
   redirect '/game/player'
 end
 
@@ -142,17 +163,11 @@ get '/game/player' do
     @show_hit_or_stay_buttons = false
   end
   
-  erb :game
-end
-
-post '/player_hit' do
-  session[:player_cards] << session[:deck].pop
-  redirect '/game/player'
+  erb :game, layout: false
 end
 
 post '/player_stay' do
   session[:player_turn] = false
-  
   redirect '/game/dealer'
 end
 
@@ -171,7 +186,7 @@ get '/game/dealer' do
     redirect '/compare'
   end
   
-  erb :game
+  erb :game, layout: false
 end
 
 post '/dealer_hit' do
@@ -190,7 +205,7 @@ get '/compare' do
   elsif player_total < dealer_total
     loser!("#{dealer_total} beats #{player_total}")
   else
-    @success = "It's a tie!"
+    tie!("It's a tie!")
   end
   
   erb :game
